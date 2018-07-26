@@ -53,7 +53,7 @@ class Project extends Model {
     this.repositories = []
   }
 
-  reset (packageManager) {
+  reset (packageManager, projectPaths = []) {
     this.emitter.dispose()
     this.emitter = new Emitter()
 
@@ -64,7 +64,7 @@ class Project extends Model {
       if (buffer != null) buffer.destroy()
     }
     this.buffers = []
-    this.setPaths([])
+    this.setPaths(projectPaths)
     this.loadPromisesByPath = {}
     this.retiredBufferIDs = new Set()
     this.retiredBufferPaths = new Set()
@@ -337,6 +337,8 @@ class Project extends Model {
   //   * `exact` If `true`, only add a `projectPath` if it names an existing directory. If `false` and any `projectPath`
   //     is a file or does not exist, its parent directory will be added instead. Default: `false`.
   setPaths (projectPaths, options = {}) {
+    if (_.isEqual(projectPaths, this.getPaths())) return
+
     for (let repository of this.repositories) {
       if (repository != null) repository.destroy()
     }

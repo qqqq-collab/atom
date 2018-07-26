@@ -127,7 +127,7 @@ afterEach ->
   ensureNoDeprecatedStylesheets()
 
   waitsForPromise ->
-    atom.reset()
+    atom.reset({projectPaths: [specProjectPath]})
 
   runs ->
     document.getElementById('jasmine-content').innerHTML = '' unless window.debugContent

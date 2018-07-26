@@ -9,10 +9,6 @@ const GitRepository = require('../src/git-repository')
 
 describe('Project', () => {
   beforeEach(() => {
-    const directory = atom.project.getDirectories()[0]
-    const paths = directory ? [directory.resolve('dir')] : [null]
-    atom.project.setPaths(paths)
-
     // Wait for project's service consumers to be asynchronously added
     waits(1)
   })
@@ -104,7 +100,7 @@ describe('Project', () => {
     })
 
     it('listens for destroyed events on deserialized buffers and removes them when they are destroyed', () => {
-      waitsForPromise(() => atom.workspace.open('a'))
+      waitsForPromise(() => atom.workspace.open(path.join('dir', 'a')))
 
       runs(() => {
         expect(atom.project.getBuffers().length).toBe(1)
@@ -554,7 +550,7 @@ describe('Project', () => {
         )
 
         waitsForPromise(() =>
-          atom.workspace.open('a').then(({buffer}) => {
+          atom.workspace.open(path.join('dir', 'a')).then(({buffer}) => {
             expect(buffer).toBe(editor.buffer)
             expect(newBufferHandler).not.toHaveBeenCalled()
           })
@@ -771,12 +767,12 @@ describe('Project', () => {
       expect(onDidChangePathsSpy).not.toHaveBeenCalled()
 
       // Doesn't add an entry for a file-path within an existing root directory
-      atom.project.addPath(path.join(oldPath, 'some-file.txt'))
+      atom.project.addPath(path.join(oldPath, 'a'))
       expect(atom.project.getPaths()).toEqual([oldPath])
       expect(onDidChangePathsSpy).not.toHaveBeenCalled()
 
       // Does add an entry for a directory within an existing directory
-      const newPath = path.join(oldPath, 'a-dir')
+      const newPath = path.join(oldPath, 'dir')
       atom.project.addPath(newPath)
       expect(atom.project.getPaths()).toEqual([oldPath, newPath])
       expect(onDidChangePathsSpy).toHaveBeenCalled()
@@ -1078,7 +1074,7 @@ describe('Project', () => {
 
     describe('when the given path is inside more than one root folder', () => {
       it('uses the root folder that is closest to the given path', () => {
-        atom.project.addPath(path.join(atom.project.getPaths()[0], 'a-dir'))
+        atom.project.addPath(path.join(atom.project.getPaths()[0], 'dir', 'a-dir'))
 
         const inputPath = path.join(atom.project.getPaths()[1], 'somewhere/something.txt')
 

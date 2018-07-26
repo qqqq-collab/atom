@@ -332,7 +332,7 @@ class AtomEnvironment {
     if (this.config.get('core.autoHideMenuBar')) this.setAutoHideMenuBar(true)
   }
 
-  async reset () {
+  async reset ({projectPaths = []} = {}) {
     this.deserializers.clear()
     this.registerDefaultDeserializers()
 
@@ -358,7 +358,7 @@ class AtomEnvironment {
     await this.packages.reset()
     this.workspace.reset(this.packages)
     this.registerDefaultOpeners()
-    this.project.reset(this.packages)
+    this.project.reset(this.packages, projectPaths)
     this.workspace.subscribeToEvents()
     this.grammars.clear()
     this.textEditors.clear()
