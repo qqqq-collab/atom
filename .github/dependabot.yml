@@ -1,0 +1,20 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: fs-admin
+    versions:
+    - 0.16.0
+    - 0.18.0
+  - dependency-name: sinon
+    versions:
+    - 10.0.0
+    - 9.2.4
+  - dependency-name: text-buffer
+    versions:
+    - 13.17.4
